@@ -1,0 +1,56 @@
+{
+  "name": "fullstack-project",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Full-stack project with NestJS GraphQL backend and Next.js frontend",
+  "workspaces": [
+    "apps/*",
+    "services/*",
+    "shared/*"
+  ],
+  "scripts": {
+    "dev": "yarn workspaces foreach -pi run dev",
+    "build": "yarn workspaces foreach -t run build",
+    "build:shared": "yarn workspaces foreach -pt --include '@project/shared-*' run build",
+    "build:services": "yarn workspaces foreach -pt --include '@project/*-service' run build",
+    "build:apps": "yarn workspaces foreach -pt --include '@project/web-*' run build",
+    "test": "yarn workspaces foreach run test",
+    "test:watch": "yarn workspaces foreach -pi run test:watch",
+    "lint": "./node_modules/.bin/eslint . --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "./node_modules/.bin/eslint . --ext .ts,.tsx,.js,.jsx --fix",
+    "type-check": "yarn workspaces foreach run type-check",
+    "clean": "yarn workspaces foreach run clean && rm -rf node_modules",
+    "dev:gateway": "yarn workspace @project/gateway dev",
+    "dev:web": "yarn workspace @project/web-dashboard dev",
+    "dev:auth": "yarn workspace @project/auth-service dev",
+    "dev:user": "yarn workspace @project/user-service dev",
+    "lint:check": "./node_modules/.bin/eslint . --ext .ts,.tsx,.js,.jsx --max-warnings 0",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "concurrently": "^8.0.0",
+    "eslint": "8.57.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.0.0",
+    "prettier": "^3.1.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "yarn": ">=3.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "./node_modules/.bin/eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
+  }
+}

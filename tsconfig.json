@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "@project/shared-types": ["shared/types/src"],
+      "@project/shared-types/*": ["shared/types/src/*"],
+      "@project/shared-utils": ["shared/utils/src"],
+      "@project/shared-utils/*": ["shared/utils/src/*"],
+      "@project/shared-ui": ["shared/ui/src"],
+      "@project/shared-ui/*": ["shared/ui/src/*"],
+      "@project/shared-config": ["shared/config/src"],
+      "@project/shared-config/*": ["shared/config/src/*"]
+    }
+  },
+  "include": ["apps/**/*", "services/**/*", "shared/**/*"],
+  "exclude": ["node_modules", "**/node_modules", "**/dist", "**/.next"]
+}
