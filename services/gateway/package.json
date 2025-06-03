@@ -21,6 +21,7 @@
     "@project/shared-types": "workspace:*",
     "apollo-server-core": "^3.12.0",
     "apollo-server-express": "^3.12.0",
+    "dotenv": "^16.5.0",
     "graphql": "^16.6.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1"
