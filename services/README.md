@@ -3,6 +3,6 @@
 This directory contains backend microservices:
 
 - `gateway/` - API Gateway with GraphQL Federation
-- `auth-service/` - Authentication and authorization
-- `user-service/` - User management
-- `notification-service/` - Email/SMS notifications (future)
+- `auth/` - Authentication and authorization
+- `user/` - User management
+- `notification/` - Email/SMS notifications (future)

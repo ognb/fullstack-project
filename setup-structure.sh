@@ -6,7 +6,7 @@ echo "🚀 Setting up full-stack project structure..."
 # Create all directories
 echo "📁 Creating directory structure..."
 mkdir -p apps/web-dashboard
-mkdir -p services/gateway services/auth-service services/user-service  
+mkdir -p services/gateway services/auth services/user
 mkdir -p shared/types shared/utils shared/ui shared/config
 mkdir -p tools/scripts tools/docker
 
@@ -29,9 +29,9 @@ cat > services/README.md << 'EOF'
 This directory contains backend microservices:
 
 - `gateway/` - API Gateway with GraphQL Federation
-- `auth-service/` - Authentication and authorization
-- `user-service/` - User management
-- `notification-service/` - Email/SMS notifications (future)
+- `auth/` - Authentication and authorization
+- `user/` - User management
+- `notification/` - Email/SMS notifications (future)
 EOF
 
 cat > shared/README.md << 'EOF'
