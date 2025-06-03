@@ -4,21 +4,15 @@ import {
   ApolloFederationDriver,
   ApolloFederationDriverConfig,
 } from '@nestjs/apollo';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from './config/config.module';
-import { DatabaseModule } from './database/database.module';
+import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
-    // Configuration
     ConfigModule,
-
-    // Database
-    DatabaseModule,
-
-    // GraphQL Federation
+    PrismaModule,
     GraphQLModule.forRoot<ApolloFederationDriverConfig>({
       driver: ApolloFederationDriver,
       autoSchemaFile: {
@@ -28,8 +22,6 @@ import { HealthModule } from './health/health.module';
       introspection: process.env.NODE_ENV !== 'production',
       context: ({ req }) => ({ req }),
     }),
-
-    // Feature modules
     UsersModule,
     HealthModule,
   ],

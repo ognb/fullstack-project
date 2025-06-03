@@ -1,4 +1,3 @@
-// services/user/src/config/config.service.ts
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -19,16 +18,6 @@ export class ConfigService {
     return this.nodeEnv === 'production';
   }
 
-  // Database configuration
-  get database() {
-    return {
-      type: (process.env.DB_TYPE as any) || 'sqlite',
-      database: process.env.DB_DATABASE || 'users.db',
-      synchronize: process.env.DB_SYNCHRONIZE === 'true',
-      logging: process.env.DB_LOGGING === 'true',
-    };
-  }
-
   // Service information
   get serviceInfo() {
     return {
@@ -36,5 +25,10 @@ export class ConfigService {
       url: process.env.SERVICE_URL || `http://localhost:${this.port}/graphql`,
       version: '1.0.0',
     };
+  }
+
+  // Database URL (used by Prisma)
+  get databaseUrl(): string {
+    return process.env.DATABASE_URL || 'file:./users.db';
   }
 }

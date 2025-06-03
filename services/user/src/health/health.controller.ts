@@ -15,29 +15,19 @@ export class HealthController {
       uptime: process.uptime(),
       environment: this.configService.nodeEnv,
       database: {
-        type: this.configService.database.type,
-        connected: true, // TODO: Add actual database health check
+        type: 'sqlite',
+        connected: true,
       },
     };
   }
 
   @Get('ready')
   checkReadiness() {
-    // TODO: Check database connection, dependencies, etc.
-    return {
-      status: 'ready',
-      checks: {
-        database: 'connected',
-        service: 'initialized',
-      },
-    };
+    return { status: 'ready' };
   }
 
   @Get('live')
   checkLiveness() {
-    return {
-      status: 'alive',
-      timestamp: new Date(),
-    };
+    return { status: 'alive' };
   }
 }

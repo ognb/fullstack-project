@@ -4,6 +4,8 @@ import {
   Mutation,
   Args,
   ID,
+  ResolveField,
+  Parent,
   ResolveReference,
 } from '@nestjs/graphql';
 import { UsersService } from './users.service';
@@ -51,7 +53,27 @@ export class UsersResolver {
     return this.usersService.remove(id);
   }
 
-  // Federation: Resolve user by ID from other services
+  // New Prisma-powered queries
+  // @Query(() => [User], { name: 'activeUsers' })
+  // async findActiveUsers(): Promise<User[]> {
+  //   return this.usersService.findUsersWithRecentActivity();
+  // }
+
+  // @Query(() => Number, { name: 'userCount' })
+  // async getUserCount(): Promise<number> {
+  //   return this.usersService.getUserCount();
+  // }
+
+  // Computed field resolver
+  @ResolveField(() => String, { nullable: true })
+  fullName(@Parent() user: User): string | null {
+    if (user.firstName && user.lastName) {
+      return `${user.firstName} ${user.lastName}`;
+    }
+    return null;
+  }
+
+  // Federation support
   @ResolveReference()
   async resolveReference(reference: {
     __typename: string;
