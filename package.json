@@ -9,29 +9,49 @@
     "shared/*"
   ],
   "scripts": {
-    "dev": "yarn workspaces foreach -pi run dev",
-    "build": "yarn workspaces foreach -t run build",
-    "build:shared": "yarn workspaces foreach -pt --include '@project/shared-*' run build",
-    "build:services": "yarn workspaces foreach -pt --include '@project/*-service' run build",
-    "build:apps": "yarn workspaces foreach -pt --include '@project/web-*' run build",
+    "dev": "concurrently --kill-others-on-fail --prefix \"[{name}]\" --names \"USER,GATEWAY,WEB\" --prefix-colors \"yellow,green,cyan\" \"yarn dev:user\" \"yarn dev:gateway:delayed\" \"yarn dev:web\"",
+    "dev:gateway": "yarn workspace @project/gateway start:dev",
+    "dev:gateway:delayed": "sleep 3 && yarn workspace @project/gateway start:dev",
+    "dev:user": "yarn workspace @project/user-service start:dev",
+    "dev:web": "yarn workspace @project/web-dashboard dev",
+    "dev:services": "concurrently --kill-others-on-fail --prefix \"[{name}]\" --names \"USER,GATEWAY\" --prefix-colors \"yellow,green\" \"yarn dev:user\" \"yarn dev:gateway:delayed\"",
+    "dev:apps": "yarn workspace @project/web-dashboard dev",
+    "dev:shared": "yarn workspaces foreach --all --include '@project/shared-*' run dev || echo 'No shared packages with dev script'",
+    "build": "yarn build:shared && yarn build:services && yarn build:apps",
+    "build:shared": "yarn workspaces foreach --all --parallel --include '@project/shared-*' run build",
+    "build:services": "yarn workspaces foreach --all --parallel --include '@project/*-service' run build && yarn workspace @project/gateway build",
+    "build:apps": "yarn workspaces foreach --all --parallel --include '@project/web-*' run build",
+    "start": "concurrently --names \"GATEWAY,USER,WEB\" --prefix-colors \"green,yellow,cyan\" \"yarn start:gateway\" \"yarn start:user\" \"yarn start:web\"",
+    "start:gateway": "yarn workspace @project/gateway start:prod",
+    "start:user": "yarn workspace @project/user-service start:prod",
+    "start:web": "yarn workspace @project/web-dashboard start",
+    "start:services": "concurrently --names \"GATEWAY,USER\" --prefix-colors \"green,yellow\" \"yarn start:gateway\" \"yarn start:user\"",
+    "start:apps": "yarn workspace @project/web-dashboard start",
     "test": "yarn workspaces foreach run test",
     "test:watch": "yarn workspaces foreach -pi run test:watch",
+    "test:coverage": "yarn workspaces foreach run test:cov",
     "lint": "./node_modules/.bin/eslint . --ext .ts,.tsx,.js,.jsx",
     "lint:fix": "./node_modules/.bin/eslint . --ext .ts,.tsx,.js,.jsx --fix",
+    "lint:check": "./node_modules/.bin/eslint . --ext .ts,.tsx,.js,.jsx --max-warnings 0",
     "type-check": "yarn workspaces foreach run type-check",
     "clean": "yarn workspaces foreach run clean && rm -rf node_modules",
-    "dev:gateway": "yarn workspace @project/gateway dev",
-    "dev:web": "yarn workspace @project/web-dashboard dev",
-    "dev:auth": "yarn workspace @project/auth-service dev",
-    "dev:user": "yarn workspace @project/user-service dev",
-    "lint:check": "./node_modules/.bin/eslint . --ext .ts,.tsx,.js,.jsx --max-warnings 0",
+    "clean:dist": "yarn workspaces foreach run clean",
+    "clean:deps": "rm -rf node_modules && yarn workspaces foreach exec rm -rf node_modules",
+    "db:generate": "yarn workspace @project/user-service prisma:generate",
+    "db:migrate": "yarn workspace @project/user-service prisma:migrate",
+    "db:seed": "yarn workspace @project/user-service db:seed",
+    "db:studio": "yarn workspace @project/user-service prisma:studio",
+    "db:reset": "yarn workspace @project/user-service prisma:reset",
+    "setup": "yarn install && yarn build:shared && yarn db:generate && yarn db:migrate && yarn db:seed",
+    "reset": "yarn clean && yarn install && yarn setup",
+    "health": "concurrently --names \"GATEWAY,USER\" --prefix-colors \"green,yellow\" \"curl -f http://localhost:4000/health || echo 'Gateway: DOWN'\" \"curl -f http://localhost:4002/health || echo 'User Service: DOWN'\"",
     "prepare": "husky"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
-    "concurrently": "^8.0.0",
+    "concurrently": "^8.2.2",
     "eslint": "8.57.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
@@ -52,5 +72,21 @@
     "*.{json,md,yml,yaml}": [
       "prettier --write"
     ]
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/fullstack-project.git"
+  },
+  "keywords": [
+    "typescript",
+    "nodejs",
+    "nestjs",
+    "nextjs",
+    "graphql",
+    "prisma",
+    "monorepo",
+    "microservices"
+  ],
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT"
 }
