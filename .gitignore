@@ -41,6 +41,10 @@ Thumbs.db
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
 .pnp.*
 
 # Testing
